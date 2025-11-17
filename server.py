@@ -3,18 +3,16 @@ from EmotionDetection.emotion_detection import emotion_detector
 
 app = Flask("Emotion Detector")
 
-@app.route("/emotionDetection")
-def emotion_detector():
+@app.route("/emotionDetector")
+def emotion_function():
 
-    text_to_analyze = request.args.get("textToAnalyze")
+    text_to_analyze = request.args.get("textToAnalyze") # Analyzing the Text
 
-    response = emotion_detector(text_to_analyze)
-
-    emotion_list = ['emotionPredictions'][0]['emotion']
+    response = emotion_detector(text_to_analyze) # Storing the Analyzed Result
 
     # 1. Storing Anger's Score
 
-    anger_score = emotion_list['anger']
+    anger_score = response['anger']
 
     highest_score = anger_score
 
@@ -22,7 +20,7 @@ def emotion_detector():
 
     # 2. Storing and Evaluating Disgust's Score
 
-    disgust_score = emotion_list['disgust']
+    disgust_score = response['disgust']
 
     if disgust_score > highest_score:
         highest_score = disgust_score
@@ -30,7 +28,7 @@ def emotion_detector():
     
     # 3. Storing and Evaluating Fear's Score
     
-    fear_score = emotion_list['fear']
+    fear_score = response['fear']
 
     if fear_score > highest_score:
         highest_score = fear_score
@@ -38,7 +36,7 @@ def emotion_detector():
     
     # 4. Storing and Evaluating Joy's Score
 
-    joy_score = emotion_list['joy']
+    joy_score = response['joy']
 
     if joy_score > highest_score:
         highest_score = joy_score
@@ -46,7 +44,7 @@ def emotion_detector():
     
     # 5. Storing and Evaluating Sadness's Score
 
-    sadness_score = emotion_list['sadness']
+    sadness_score = response['sadness']
 
     if sadness_score > highest_score:
         highest_score = sadness_score
@@ -54,7 +52,7 @@ def emotion_detector():
 
     # Returning the final text
 
-    return "For the given statement, the system response is 'anger': {}, 'disgust': {}, 'fear': {}, 'joy': {} and 'sadness': {}. The dominant emotion is {}.".format(anger_score, disgust_score, fear_socre, joy_score, sadness_score, dominant_emotion)
+    return "For the given statement, the system response is 'anger': {}, 'disgust': {}, 'fear': {}, 'joy': {} and 'sadness': {}. The dominant emotion is {}.".format(anger_score, disgust_score, fear_score, joy_score, sadness_score, dominant_emotion)
 
 
 @app.route("/")

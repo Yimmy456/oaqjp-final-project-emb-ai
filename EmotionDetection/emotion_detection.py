@@ -11,6 +11,25 @@ def emotion_detector(text_to_analyze): # Define the "emotion_detector" function
 
     response = requests.post(url, json = myobj, headers = header) # Initialize the response
 
+    if response.status_code == 400: # If the status code of the response is equal to 400, then...
+        
+        final_dict = { # Initialize a dictionary and set its values to 'None'
+
+            'anger': None, # 1. Set the value of 'anger' to 'None'
+
+            'disgust': None, # 2. Set the value of 'disgust' to 'None'
+
+            'fear': None, # 3. Set the value of 'fear' to 'None'
+
+            'joy': None, # 4. Set the value of 'joy' to 'None'
+
+            'sadness': None, # 5. Set the value of 'sadness' to 'None'
+
+            'dominant_emotion': None # 6. Set the value of 'dominant_emotion' to 'None'
+        }
+
+        return final_dict # Return a dictionary with all the values set to 'None'
+    
     formatted_response = json.loads(response.text) # Format the response via json
 
     emotion_list = formatted_response['emotionPredictions'][0]['emotion'] # Store the list of emotions in a variable

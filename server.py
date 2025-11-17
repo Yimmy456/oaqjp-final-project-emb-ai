@@ -10,6 +10,9 @@ def emotion_function():
 
     response = emotion_detector(text_to_analyze) # Storing the Analyzed Result
 
+    if response['dominant_emotion'] == None: # If the value of the key 'dominant_emotion' in 'response' is equal to 'None', then...
+        return "Invalid text! Please try again!" # Terminamte the function by returning a default string
+
     # 1. Storing Anger's Score
 
     anger_score = response['anger']

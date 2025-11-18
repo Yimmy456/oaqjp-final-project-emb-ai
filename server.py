@@ -1,3 +1,7 @@
+"""
+This is the server
+"""
+
 # Import 'Flask', 'render_template', and 'request' from 'flask'
 from flask import Flask, render_template, request
 # Import 'emotion_detector' function from 'emotion_detection'
@@ -6,10 +10,14 @@ from EmotionDetection.emotion_detection import emotion_detector
 # Name the application
 app = Flask("Emotion Detector")
 
-# Set the route for the javascript page
-@app.route("/emotionDetector")
-# Define the function
+
+@app.route("/emotionDetector") # Set the route for the javascript page
+
+
 def emotion_function():
+    '''
+    Define the emotion function
+    '''
 
     # Analyzing the Text
     text_to_analyze = request.args.get("textToAnalyze")
@@ -21,40 +29,42 @@ def emotion_function():
     if response['dominant_emotion'] is None:
         # Terminamte the function by returning a default string
         return "Invalid text! Please try again!"
+    # Set the final string to display in the interface
+    final_string = "For the given statement, the system response is "
 
-    # 1. Storing Anger's Score
-    anger_score = response['anger']
-    highest_score = anger_score
-    dominant_emotion = 'anger'
-    # 2. Storing and Evaluating Disgust's Score
-    disgust_score = response['disgust']
-    if disgust_score > highest_score:
-        highest_score = disgust_score
-        dominant_emotion = 'disgust'
-    # 3. Storing and Evaluating Fear's Score
-    fear_score = response['fear']
-    if fear_score > highest_score:
-        highest_score = fear_score
-        dominant_emotion = 'fear'
-    # 4. Storing and Evaluating Joy's Score
-    joy_score = response['joy']
-    if joy_score > highest_score:
-        highest_score = joy_score
-        dominant_emotion = 'joy'
-    # 5. Storing and Evaluating Sadness's Score
-    sadness_score = response['sadness']
-    if sadness_score > highest_score:
-        highest_score = sadness_score
-        dominant_emotion = 'sadness'
+    # Initialize 'count' by 0
+    count = 0
+
+    # Initialize 'length' by the length of the 'response' dictionary
+    length = len(response)
+
+    # Make a loop and iterate through each emotion and
+    # find the dominant emotion
+    for key, value in response.items():
+        # If it is the last element in the dictionary, then...
+        if count == (length - 1):
+            # Print the dominant emotion
+            final_string += f"The dominant emotion is '{value}'."
+        # Else, if it is the second-to-last element, then...
+        elif count == (length - 2):
+            # Add 'and' at the beginning and a full-stop at the end before appending
+            final_string += f"and '{key}': {value}. "
+        #Else, by default...
+        else:
+            # Add a comma at the end
+            final_string += f"'{key}': {value}, "
+        # Increment the value of 'count' by 1
+        count = count + 1
+
     # Returning the final text
-    return "For the given statement, the system response is 'anger': {}, 'disgust': {}, 'fear': {}, 'joy': {} and 'sadness': {}. The dominant emotion is {}.".format(anger_score, disgust_score, fear_score, joy_score, sadness_score, dominant_emotion)
+    return final_string
 
-#Set the route of the app
-@app.route("/")
-def render_index_page(): # Define the rendering
-    # Render the interface on the 'index.html' page
-    return render_template("index.html")
+@app.route("/") #Set the route of the app
+def render_index_page():
+    '''
+    Define the rendering
+    '''
+    return render_template("index.html") # Render the interface on the 'index.html' page
 
 if __name__ == "__main__": # If this script is the main file, then...
-    # Run the app
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=5000) # Run the app
